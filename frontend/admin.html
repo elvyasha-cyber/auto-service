@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Вход мастера — Auto Atelier</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Manrope:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="sky" aria-hidden="true">
+      <span class="orb orb-1"></span>
+      <span class="orb orb-2"></span>
+      <span class="orb orb-3"></span>
+      <span class="orb orb-4"></span>
+      <span class="orb orb-5"></span>
+    </div>
+
+    <main class="page page-narrow" id="admin-page">
+      <header class="masthead">
+        <p class="mark">Auto Atelier</p>
+        <h1>Мастер</h1>
+        <p class="lede">Очередь заявок и каталог услуг мастерской.</p>
+      </header>
+
+      <section id="login-card" class="card">
+        <form id="login-form" novalidate>
+          <h2>Вход</h2>
+          <label class="field">
+            <span>Логин</span>
+            <input name="login" type="text" autocomplete="username" />
+          </label>
+          <label class="field">
+            <span>Пароль</span>
+            <input name="password" type="password" autocomplete="current-password" />
+          </label>
+          <p id="login-error" class="form-error" hidden></p>
+          <button type="submit">Войти</button>
+        </form>
+
+        <form id="register-form" novalidate hidden>
+          <h2>Первый вход</h2>
+          <p class="fine">Пока в базе нет мастера, здесь можно создать единственную учётную запись. После этого кнопка пропадёт.</p>
+          <label class="field">
+            <span>Логин</span>
+            <input name="login" type="text" autocomplete="username" />
+          </label>
+          <label class="field">
+            <span>Пароль</span>
+            <input name="password" type="password" autocomplete="new-password" />
+          </label>
+          <p id="register-error" class="form-error" hidden></p>
+          <button type="submit">Зарегистрироваться</button>
+        </form>
+      </section>
+
+      <section id="panel" class="card" hidden>
+        <div class="session-bar">
+          <p id="session-text" class="fine"></p>
+          <button type="button" id="logout">Выйти</button>
+        </div>
+        <button type="button" id="stats-open">Статистика пользователей</button>
+        <h2>Очередь заявок</h2>
+        <p class="fine queue-lead">Горячие сверху. Программа смотрит срок, бюджет, кто написал, размер компании, объём и нишу. Пометки «срочно» в базе нет.</p>
+        <p id="queue-error" class="form-error" hidden></p>
+        <div id="queue-summary" class="queue-summary"></div>
+        <div class="service-table-wrap">
+          <table class="service-table queue-table">
+            <thead>
+              <tr>
+                <th>№</th>
+                <th>Кто</th>
+                <th>Температура</th>
+                <th>Срок</th>
+                <th>Отдел</th>
+                <th>Менеджер</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="queue-rows"></tbody>
+          </table>
+          <p id="queue-empty" class="fine" hidden>Заявок пока нет.</p>
+        </div>
+        <h2 class="section-gap">Услуги</h2>
+        <p id="service-status" class="service-status" hidden></p>
+        <div class="service-desk">
+          <div class="service-table-wrap">
+            <table class="service-table">
+              <thead>
+                <tr>
+                  <th>№</th>
+                  <th>Услуга</th>
+                  <th>От</th>
+                  <th>До</th>
+                </tr>
+              </thead>
+              <tbody id="service-rows"></tbody>
+            </table>
+            <p id="service-empty" class="fine" hidden>В каталоге пока нет услуг.</p>
+          </div>
+          <form id="service-form" class="service-tools" novalidate>
+            <p class="mark">Правка</p>
+            <label class="field">
+              <span>Название</span>
+              <input id="service-name" type="text" />
+            </label>
+            <label class="field">
+              <span>Бюджет от</span>
+              <input id="service-min" type="text" inputmode="numeric" placeholder="15000" />
+            </label>
+            <label class="field">
+              <span>Бюджет до</span>
+              <input id="service-max" type="text" inputmode="numeric" placeholder="250000" />
+            </label>
+            <p id="service-error" class="form-error" hidden></p>
+            <button type="button" id="service-add">Добавить</button>
+            <button type="button" id="service-save">Сохранить</button>
+            <button type="button" id="service-delete" class="ghost">Удалить</button>
+            <p class="fine">«Добавить» создаёт новую услугу. «Сохранить» и «Удалить» меняют выбранную строку.</p>
+          </form>
+        </div>
+      </section>
+
+      <p class="masthead-links"><a class="master-link" href="/">К заявке клиента</a></p>
+    </main>
+    <script type="module" src="/src/admin.js"></script>
+    <div id="stats-modal" class="stats-modal" hidden>
+      <div class="stats-sheet">
+        <div class="stats-modal-bar">
+          <p class="mark">Страница заявки</p>
+          <button type="button" id="stats-close">Закрыть</button>
+        </div>
+        <h2>Статистика пользователей</h2>
+        <p class="fine stats-lead">Крупнее круг — дольше курсор был в этом месте.</p>
+        <p id="stats-error" class="form-error" hidden></p>
+        <div id="stats-periods" class="stats-periods"></div>
+        <p id="stats-note" class="fine" hidden></p>
+        <div class="heatmap-frame">
+          <svg id="heatmap" viewBox="0 0 1000 640" role="img" aria-label="Карта курсора"></svg>
+          <p id="heatmap-empty" class="fine" hidden>Точек курсора пока нет. Откройте страницу заявки и подвигайте мышь.</p>
+        </div>
+      </div>
+    </div>
+    <div id="lead-modal" class="stats-modal" hidden>
+      <div class="stats-sheet lead-sheet">
+        <div class="stats-modal-bar">
+          <p class="mark" id="lead-place">Очередь</p>
+          <button type="button" id="lead-close">Закрыть</button>
+        </div>
+        <h2 id="lead-name"></h2>
+        <p id="lead-temp" class="temp"></p>
+        <p id="lead-main" class="lead-main"></p>
+        <ul id="lead-reasons" class="lead-reasons"></ul>
+        <div class="lead-decisions">
+          <article class="stats-card">
+            <span>Время мастера</span>
+            <p id="lead-spend"></p>
+          </article>
+          <article class="stats-card">
+            <span>Отдел</span>
+            <p id="lead-department"></p>
+          </article>
+          <article class="stats-card">
+            <span>Менеджер</span>
+            <p id="lead-manager"></p>
+          </article>
+        </div>
+        <div id="lead-facts" class="lead-facts"></div>
+        <h3 class="lead-contact-title">Связаться</h3>
+        <div id="lead-contacts" class="lead-contacts"></div>
+      </div>
+    </div>
+  </body>
+</html>

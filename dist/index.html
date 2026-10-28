@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Заявка — Auto Atelier</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Manrope:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <script type="module" crossorigin src="/assets/main-CyBH2FlP.js"></script>
+    <link rel="modulepreload" crossorigin href="/assets/styles-9ssJW4-U.js">
+    <link rel="stylesheet" crossorigin href="/assets/styles-0AJ05CEd.css">
+  </head>
+  <body>
+    <div class="sky" aria-hidden="true">
+      <span class="orb orb-1"></span>
+      <span class="orb orb-2"></span>
+      <span class="orb orb-3"></span>
+      <span class="orb orb-4"></span>
+      <span class="orb orb-5"></span>
+      <span class="orb orb-6"></span>
+      <span class="orb orb-7"></span>
+    </div>
+
+    <main class="page">
+      <header class="masthead">
+        <p class="mark">Auto Atelier</p>
+        <h1>Частная заявка</h1>
+        <p class="lede">
+          Опишите задачу так, как рассказали бы мастеру лично. Услуги и диапазон бюджета мастерская задаёт сама — форма собирается по этим данным.
+        </p>
+        <p class="masthead-links"><a class="master-link" href="/admin">Вход для мастера</a></p>
+      </header>
+
+      <form id="lead-form" class="card" novalidate>
+        <section>
+          <h2>Контакт</h2>
+          <div class="grid-3">
+            <label class="field" data-field="имя">
+              <span>Имя</span>
+              <input name="first_name" type="text" autocomplete="given-name" />
+            </label>
+            <label class="field" data-field="фамилия">
+              <span>Фамилия</span>
+              <input name="last_name" type="text" autocomplete="family-name" />
+            </label>
+            <label class="field" data-field="отчество">
+              <span>Отчество</span>
+              <input name="middle_name" type="text" autocomplete="additional-name" />
+            </label>
+          </div>
+        </section>
+
+        <section>
+          <h2>Бизнес</h2>
+          <label class="field" data-field="ниша">
+            <span>Ниша</span>
+            <input name="business_niche" type="text" placeholder="Например, частный автопарк" />
+          </label>
+          <label class="field" data-field="о бизнесе">
+            <span>О бизнесе</span>
+            <textarea name="business_info" rows="3" placeholder="Коротко, чем занимаетесь"></textarea>
+          </label>
+          <div class="grid-2">
+            <label class="field" data-field="размер компании">
+              <span>Размер компании</span>
+              <input name="company_size" type="text" placeholder="Людей в команде" />
+            </label>
+            <label class="field" data-field="размер бизнеса">
+              <span>Размер бизнеса</span>
+              <input name="business_size" type="text" placeholder="Масштаб, оборот, филиалы" />
+            </label>
+          </div>
+          <label class="field" data-field="роль">
+            <span>Кто заполняет заявку</span>
+            <select name="client_role">
+              <option value="">Выберите</option>
+              <option>Сотрудник</option>
+              <option>Руководитель</option>
+            </select>
+          </label>
+        </section>
+
+        <section>
+          <h2>Задача</h2>
+          <label class="field" data-field="услуга из списка">
+            <span>Услуга из списка</span>
+            <select id="product">
+              <option value="">Загружаем услуги…</option>
+            </select>
+          </label>
+          <label class="field" data-field="своя услуга">
+            <span>Своя услуга</span>
+            <input id="product-name" name="product_name" type="text" placeholder="Выберите выше или напишите свою" />
+          </label>
+          <div class="grid-2">
+            <label class="field" data-field="тип задачи">
+              <span>Тип задачи</span>
+              <input name="task_type" type="text" placeholder="Разовая работа или сопровождение" />
+            </label>
+            <label class="field" data-field="срок">
+              <span>Когда нужен результат</span>
+              <input name="deadline" type="text" placeholder="К концу месяца" />
+            </label>
+          </div>
+          <div class="grid-2">
+            <label class="field" data-field="объём задачи">
+              <span>Объём задачи</span>
+              <input name="task_volume" type="text" placeholder="Один автомобиль, партия, парк" />
+            </label>
+            <label class="field" data-field="объём потребности">
+              <span>Объём потребности</span>
+              <input name="need_volume" type="text" placeholder="Сколько и как часто" />
+            </label>
+          </div>
+          <div class="grid-2" data-field="бюджет">
+            <label class="field">
+              <span>Бюджет от</span>
+              <input id="budget-from" name="budget_from" type="text" inputmode="numeric" placeholder="15000" />
+            </label>
+            <label class="field">
+              <span>Бюджет до</span>
+              <input id="budget-to" name="budget_to" type="text" inputmode="numeric" placeholder="250000" />
+            </label>
+          </div>
+        </section>
+
+        <section>
+          <h2>Связь</h2>
+          <div id="contacts" data-field="контакты"></div>
+          <button type="button" id="add-contact" class="ghost" data-track="добавить способ связи">Добавить способ связи</button>
+          <label class="field" data-field="удобное время">
+            <span>Удобное время</span>
+            <input name="convenient_time" type="text" placeholder="Будни после 18:00" />
+          </label>
+          <label class="field" data-field="комментарий">
+            <span>Комментарий</span>
+            <textarea name="comment" rows="4" placeholder="Что важно учесть мастеру"></textarea>
+          </label>
+        </section>
+
+        <p id="form-error" class="form-error" hidden></p>
+        <button type="submit" id="submit" data-track="отправить заявку">Отправить заявку</button>
+        <p class="fine">
+          Вместе с заявкой сохраняются время на странице, нажатые кнопки, паузы курсора и число возвращений.
+        </p>
+      </form>
+
+      <section id="thanks" class="card thanks" hidden>
+        <p class="mark">Принято</p>
+        <h2>Заявка у мастера</h2>
+        <p id="thanks-text"></p>
+      </section>
+    </main>
+  </body>
+</html>

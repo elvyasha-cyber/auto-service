@@ -1,0 +1,109 @@
+services:
+  nginx:
+    image: nginx:alpine
+    container_name: auto-nginx
+    restart: unless-stopped
+    # Своего порта у сайта нет. Его открывает общая дверь сервера, уже занявшая 443.
+    # 5432 здесь — закрытая дверь с ответом 403, а не база.
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./dist:/usr/share/nginx/html:ro
+    networks:
+      - default
+      - coolify
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+      - "traefik.enable=true"
+      - "traefik.docker.network=coolify"
+      - "traefik.http.routers.autoservice.rule=Host(`89.111.153.210`)"
+      - "traefik.http.routers.autoservice.entrypoints=https"
+      - "traefik.http.routers.autoservice.priority=100"
+      - "traefik.http.routers.autoservice.tls=true"
+      - "traefik.http.routers.autoservice.service=autoservice"
+      - "traefik.http.services.autoservice.loadbalancer.server.port=80"
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: auto-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+
+  # Выключен. Обычный запуск его не поднимает.
+  pgadmin:
+    profiles: ["debug"]
+    image: dpage/pgadmin4
+    container_name: auto-pgadmin
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+
+  # Порт 8000 только внутри сети контейнеров. Ключа ports нет, снаружи его не видно.
+  backend:
+    build: ./backend
+    image: auto-backend:latest
+    container_name: auto-backend
+    restart: unless-stopped
+    expose:
+      - "8000"
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      SECRET_KEY: ${SECRET_KEY}
+    depends_on:
+      - postgres
+
+  # Выключен. Обычный запуск его не поднимает.
+  registry:
+    profiles: ["debug"]
+    image: registry:2
+    container_name: auto-registry
+    restart: unless-stopped
+    environment:
+      REGISTRY_AUTH: htpasswd
+      REGISTRY_AUTH_HTPASSWD_REALM: Registry Realm
+      REGISTRY_AUTH_HTPASSWD_PATH: /auth/htpasswd
+    volumes:
+      - ./auth:/auth
+      - registry_data:/var/lib/registry
+    ports:
+      - "5000:5000"
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+
+  watchtower:
+    image: containrrr/watchtower
+    container_name: auto-watchtower
+    restart: unless-stopped
+    environment:
+      WATCHTOWER_LABEL_ENABLE: "true"
+      DOCKER_API_VERSION: "1.44"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+networks:
+  default:
+  coolify:
+    external: true
+
+volumes:
+  postgres_data:
+  registry_data:

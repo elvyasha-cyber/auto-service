@@ -1,0 +1,5 @@
+.env
+auth/htpasswd
+node_modules/
+__pycache__/
+*.pyc
